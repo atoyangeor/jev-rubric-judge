@@ -2,55 +2,17 @@
 
 The plain-language description is in [README.md](README.md). This file has every table, every check and the exact method.
 
-[Jev](https://docs.typesafe.ai) (TypeSafe's decision model) answered 644 expert-labelled yes/no questions
-about LLM responses from InFoBench. With no human it was right on 576 of them (89.4%), against 542
-(84.2%) for an LLM judge reading first-token logprobs, at about 1/11 of the cost and 1/61 of the
-request time. The judge is `gpt-6-luna` (OpenAI's cheap tier, reasoning off), called three times per
-question; against one call the ratios are 1/3.8 and 1/20.
+**How to read this file.** It records the work in the order it was done, so later sections correct
+earlier ones:
 
-**The main condition written down before the runs was not met.** The condition: a human labels at most
-50 questions of 100, and at least 94.1% of the answers taken from Jev are right. 94.1% is how often one
-expert's answer equals the answer of at least two of the three experts, on all 1,123 questions. Result:
-the human labels 19.9 questions of 100, but 480 of the 516 answers taken from Jev are right (93.0%);
-486 were needed. The 95% interval is 90.6–95.1, so this test cannot tell 93.0% from 94.1%. The LLM judge
-passed the bar by the number (461 of 482, 95.6%) and left more questions to the human (25.2 of 100).
-
-| On the 644 test questions | Jev `jev-1.14.0` | LLM judge `gpt-6-luna`, three calls per question | One human expert (cost and time rescaled from the paper) |
-|---|---|---|---|
-| **Quality:** right with no human | 576 (89.4%) | 542 (84.2%) | 93.8% (mean of the three experts) |
-| **Money:** cost of all 644 answers | $0.0096 | $0.11 | $268 = 644 × $0.4159 |
-| **Speed:** seconds per question | 0.065 | 3.97 (1.32 for one call) | 25.4 |
-| **With one expert on the rest:** questions per 100 left to the expert; taken answers that are right | 19.9; 480 of 516 (93.0%) | 25.2; 461 of 482 (95.6%) | 100; the expert answers everything |
-| **Whole process right** (taken answers plus one expert on the rest) | 92.4% | 94.0% | 93.8% |
-
-Notes to the table:
-
-- "Right with no human": every answer is the model's, "yes" when the probability is above 0.5.
-  The gap between Jev and the LLM judge is 5.3 points, 95% interval 1.2–9.3. Always answering "yes"
-  gives 84.9% on these questions.
-- The LLM judge's prompt variant was chosen for routing, not for this row. On the dev set another judge
-  prompt was 2.5 points better with no human (87.9% against 85.4%; Jev 90.4%); it was not run on the
-  test set. Jev's request carries eight examples; the tested judge's prompt carries the instruction.
-- Jev against the LLM judge with one expert on the rest: the answers taken from Jev are right 2.6 points
-  less often (interval −5.0 to −0.5); that Jev leaves fewer questions is not established (−5.3 per 100,
-  interval −13.0 to 1.8).
-- The expert's 93.8% flatters the expert: his own vote is one of the three that define the correct
-  answer. "Whole process right" and all intervals were computed after the test run.
-- Ratios: cost 0.11 / 0.0096 ≈ 11; time 3.97 / 0.065 ≈ 61; 25.4 / 0.065 ≈ 390 against the expert.
-  Jev's 0.065 s is the summed request time, 41.9 s, divided by 644: Jev answers the 4.3 questions of a
-  response in one request, and the median request takes 0.21 s. The LLM judge gets one call per question.
-- The expert's cost and time come from the InFoBench paper: $1,416 and 1,440 minutes for three experts
-  on 1,135 questions, so $0.4159 and 25.4 s per answer.
-- Timings are from one laptop on one day. They are not a benchmark.
-
-**Money on the test set.** With Jev first, the expert labels 19.9 of 100 questions: $8.27 instead of
-$41.59 per 100 questions. The price is quality: the whole process is right on 92.4% of the questions
-against 93.8% for one expert alone.
-
-**Not a clean test, computed after the test run.** In cross-validation over all 50 instructions (1,115
-questions) Jev left 25.4 questions per 100 to a human with 95.6% of the taken answers right; the LLM
-judge left 27.5 with 95.8%; the difference between them was not tested. With boundaries tuned to 94.1%,
-as first designed, Jev met the bar in 0 of 20 cuts. The same 96% rule gave 93.0% on the real test.
+1. Sections "The test result" to "How one expert does on the same questions" use the first way of
+   grading: the right answer is the vote of the three experts, and one expert's level (94.1%) is
+   measured against a vote that includes his own.
+2. Section "Fair yardstick" regrades everything so that the person and the model are graded the same
+   way. The README is built on those numbers.
+3. Section "Independent review" lists what a separate reviewer found. Statements it withdrew: that the
+   LLM judge is 11 times more expensive and 61 times slower (one call per question is enough: about 4
+   and 20 times), and that the LLM judge cannot be made stricter.
 
 Status: test set run once on 2026-11-24. Last updated 2026-11-24.
 

@@ -307,5 +307,8 @@ uv run python -m jev_rubric_judge.cli report --part test --variants noul-fewshot
 Every model answer is saved in `runs/`, so these commands cost nothing. The full method, all tables, the
 independent review and the list of weak points are in [DETAILS.md](DETAILS.md).
 
+The files in `data/raw/` are a copy of part of InFoBench (Qin et al., MIT licence). The code in this
+repository is under the MIT licence too (see `LICENSE`).
+
 Sources: InFoBench paper https://arxiv.org/abs/2401.03601 (time and cost of the experts, Table 4);
 data https://github.com/qinyiwei/InfoBench; Jev https://docs.typesafe.ai. Last updated 2026-11-24.
