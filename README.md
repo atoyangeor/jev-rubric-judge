@@ -11,18 +11,19 @@ Three experts had already answered every question, so the right answer to each i
 
 - **Same quality for a quarter of the price.** One expert on the unsure questions: his work cost
   **$117 and not $464**, 2.0 hours and not 7.9, with the same share of right answers (94.0% against 94.1%).
-- **Better quality and still cheaper.** Three experts on the unsure questions: **96.7% right answers for
-  $352**. One expert answering everything gives 94.1% for $464.
+- **Closer to the three experts' answer, and still cheaper.** Three experts on the unsure questions:
+  the result matches the answer of the three experts on **96.7% of the questions for $352**. One expert
+  answering everything matches it on 94.1% for $464.
 - **Jev itself** cost **1.6 cents** and took **72 seconds** for all 1,115 questions.
 
-| # | Who answers the 1,115 questions | Expert answers needed | Experts' pay | Experts' time, person-hours | Model's bill | Model's time | Right answers |
+| # | Who answers the 1,115 questions | Expert answers needed | Experts' pay | Experts' time, person-hours | Model's bill | Model's time | Matches the answer of the three experts |
 |---|---|---|---|---|---|---|---|
 | 1 | One expert alone | 1,115 | $464 | 7.9 | no model | no model | 94.1% |
 | 2 | **Jev first, one expert on the rest** | **282** | **$117** | **2.0** | $0.016 | 72 seconds | **94.0%** |
 | 3 | **Jev first, three experts on the rest** | **846** (282 questions × 3) | **$352** | **6.0** | $0.016 | 72 seconds | **96.7%** |
 | 4 | Jev first and stricter, three experts on the rest | 1,296 (432 questions × 3) | $539 | 9.1 | $0.016 | 72 seconds | 97.9% |
 | 5 | Jev first and strictest, three experts on the rest | 1,920 (640 questions × 3) | $798 | 13.5 | $0.016 | 72 seconds | 98.7% |
-| 6 | Three experts on everything | 3,345 (1,115 questions × 3) | $1,391 | 23.6 | no model | no model | 100% by definition |
+| 6 | Two experts on everything, a third only where the two disagree | 2,345 | $975 | 16.5 | no model | no model | 100% by definition |
 | 7 | An ordinary LLM first, one expert on the rest | 308 | $128 | 2.2 | $0.20 | 74 minutes | 94.2% |
 | 8 | An ordinary LLM first, three experts on the rest | 924 (308 questions × 3) | $384 | 6.5 | $0.20 | 74 minutes | 97.0% |
 | 9 | Jev alone, no expert | 0 | $0 | 0 | $0.016 | 72 seconds | 89.9% |
@@ -32,24 +33,36 @@ Three experts had already answered every question, so the right answer to each i
 
 1. **Same quality, a quarter of the price** (row 2 against row 1). Jev answers what it is sure about,
    one expert answers the rest.
-2. **Better quality and cheaper** (row 3 against row 1). Send the unsure questions to three experts and
-   not one: 96.7% right for $352, against 94.1% for $464.
-3. **You can buy more accuracy by making Jev stricter** (rows 4 and 5). Jev then takes fewer answers and
-   more questions go to the three experts: 97.9% for $539, 98.7% for $798. Even the strictest row is 43%
-   cheaper than three experts on everything ($1,391).
+2. **Closer to the three experts and cheaper** (row 3 against row 1). Send the unsure questions to three
+   experts and not one: the result matches the three experts' answer on 96.7% of the questions for $352,
+   against 94.1% for $464 with one expert alone.
+3. **You can get closer still by making Jev stricter** (rows 4 and 5). Jev then takes fewer answers and
+   more questions go to the three experts: 97.9% for $539, 98.7% for $798. The cheapest way to get the
+   three experts' answer on every question costs $975 (row 6), so the strictest row saves 18%.
+   Read these rows with care: a question sent to the three experts counts as matched automatically,
+   so part of the gain from row 3 to row 5 comes only from sending more questions to them.
 4. **Making Jev stricter does not help if only one expert answers the rest.** The total stays at 94%
    whatever the setting, because one expert is himself right only 94 times out of 100. To go higher, the
    unsure questions need more than one person. That is why rows 3 to 5 use three.
-5. **An ordinary LLM** (`gpt-6-luna`) does the first two jobs about as well (rows 7 and 8), but it is
-   about 12 times more expensive and 60 times slower than Jev. And it cannot be made stricter: under the
-   setting of row 5 it takes no answers at all, so everything goes to the experts.
-6. **With no expert**, Jev is right on 5 more questions out of every 100 than the ordinary LLM (row 9
-   against row 10). Neither is as good as an expert.
+5. **An ordinary LLM** (`gpt-6-luna`) does the first two jobs about as well (rows 7 and 8). It is 4 times
+   more expensive and 20 times slower than Jev when asked each question once. We asked it three times
+   per question (12 and 60 times), and afterwards saw that one time gives the same result. We could not
+   test stricter settings for it: its sureness came back as exactly 1.000 for 716 of the 1,115 questions,
+   and such answers cannot be ranked. That is a limit of how we asked, not a proven limit of the LLM.
+6. **With no expert**, Jev matched the three experts on 1,002 questions and the ordinary LLM on 944 (row
+   9 against row 10). Part of that gap is our rule "a number above 0.5 means yes", which does not suit
+   this LLM: its numbers lean towards "no". With the cut-off tuned for each model on the tuning
+   questions, the LLM gets 564 of the 644 check-1 questions and Jev 575. That gap, 2 out of 100, is too
+   small for our data to confirm.
+7. **Jev alone is close to one expert when the expert does not grade himself.** Take the questions where
+   two experts agree and grade the third expert, Jev and the LLM against those two: the expert matches
+   them on 93.3% of the questions, Jev on 92.8%, the LLM on 87.3% (with the 0.5 rule).
 
 "100% by definition" in row 6: the right answer to a question is the answer of at least two of the three
-experts, so three experts together are always right by our measure. For the same reason, in rows 3, 4,
-5 and 8 every question that goes to the three experts counts as right; the mistakes in those rows are
-Jev's (or the LLM's) own.
+experts, so three experts together always match it. For the same reason, in rows 3, 4, 5 and 8 every
+question that goes to the three experts counts as matched; the misses in those rows are Jev's (or the
+LLM's) own. These numbers say how close a process gets to the three experts' answer. Whether the three
+experts themselves are right, nobody has checked.
 
 **One thing to know before trusting this.** We checked "Jev first, one expert on the rest" twice. In the first, stricter check
 Jev's answers were right 93 times out of 100 where 94 were needed. In the second check, with more data
@@ -89,8 +102,10 @@ The questions about this text:
 A person answers these questions. That is slow and expensive: **one answer from an expert costs $0.42
 and takes 25 seconds.**
 
-Where these two numbers come from: the authors of our dataset paid three experts $1,416 for 1,135
-questions, and the experts spent 1,440 minutes. Divide by three experts and by 1,135 questions.
+Where these two numbers come from: the authors of our dataset report that three experts spent 1,440
+minutes on 1,135 questions, and price that work at $1,416 ($59 an hour, a salary figure they took from
+ZipRecruiter). Divide by three experts and by 1,135 questions. So $0.42 is an estimate of what an
+expert's answer costs, not an invoice.
 
 ## 2. The idea
 
@@ -160,8 +175,10 @@ Here there is no person at all. The model answers all 1,115 questions.
 | 2 | Ordinary LLM | 944 of 1,115 (85 out of 100) | $0.20 | 74 minutes |
 | 3 | One expert | 94 out of 100 | $464 | 7.9 hours |
 
-**Guess 1 is confirmed.** Jev is right more often than the ordinary LLM, costs about 12 times less and
-is 60 times faster. Neither reaches the expert when working alone.
+**Guess 1 is confirmed, with a caveat.** Jev is right at least as often as the ordinary LLM, costs 4 to
+12 times less and is 20 to 60 times faster (the lower figures are for asking the LLM once per question,
+which turned out to be enough). How much more often Jev is right depends on the cut-off: 5 out of 100
+with the 0.5 rule used in this table, 2 out of 100 with a cut-off tuned for each model.
 
 Where the numbers come from:
 
@@ -212,7 +229,8 @@ with a different split and average.
 | 3 | The person alone | 100 | the person answers everything | no model | 94 |
 
 **With Jev first, the person does a quarter of the work, and the result is as accurate as the person
-alone: 94 out of 100.**
+alone: 94 out of 100.** This is the average. When we tuned on 40 randomly chosen tasks and checked on the
+other 10, 300 times over, the answers taken from Jev fell below the bar in about 1 run out of 6.
 
 In money and time, on our 1,115 questions: the expert answers 282 questions and not 1,115. That is $117
 and not $464, and 2.0 hours and not 7.9. Jev itself adds 1.6 cents and 72 seconds.
@@ -245,6 +263,8 @@ separately before trusting either.
 
 ## 10. How far to trust all of this
 
+- **The expert's price is an estimate** (section 1), and the saving ignores one cost: to tune Jev you
+  first need about a thousand questions answered by three experts. The saving starts after that.
 - **Few questions.** 1,123 questions from 50 tasks. The gap between 93 and 94 out of 100 in check 1 is
   6 answers. On another set of questions it could go either way.
 - **One ordinary LLM, a cheap one.** A stronger one might answer better.

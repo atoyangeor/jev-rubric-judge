@@ -216,10 +216,36 @@ with each of the three experts in turn:
 | LLM judge, then one expert | 93.2%, 94.3%, 94.7% | 94.0% |
 | One expert alone | 94.4%, 94.7%, 92.2% | 93.8% |
 
+## Independent review, 2026-11-24
+
+A separate reviewer recomputed every headline number from the raw files with its own code (all
+reproduce), found no bug that changes a number, and confirmed from file times that the settings were
+frozen before the test run. Its findings, each rechecked here:
+
+1. **"Three experts on the rest" rows are scored against themselves.** A question sent to the three
+   experts counts as matched by definition. Of the questions Jev leaves, 32% are 2:1 votes (13% of the
+   ones it takes). Those rows measure closeness to the three experts' vote, not correctness.
+2. **The LLM judge was handicapped.** One call routes as well as the mean of three (alone: 948 against
+   944 of 1,115), so cost and time ratios are 4 and 20, not 12 and 60. With a cut-off for "alone" tuned
+   on the dev set (0.03 for the LLM, 0.42 for Jev) the test set gives LLM 564 and Jev 575 of 644.
+3. **The LLM's probabilities are mostly saturated.** With five logprob alternatives requested, the mean
+   of three calls is exactly 1.000 on 716 of 1,115 questions and exactly 0.000 on 209. Stricter
+   boundaries cannot separate them; "the LLM cannot be made stricter" was an artefact and is withdrawn.
+4. **"Check 2 passed" is an average.** Tuning on 40 random instructions and checking on the other 10
+   (300 splits): taken answers right 95.9% on average, below 94.1% in 16% of splits; tuning on 20: 95.3%
+   and 23%. The reviewer's bootstrap over instructions for the cross-validated 95.6%: 94.0 to 97.2.
+5. **Expert cost is imputed.** The paper prices 1,440 expert minutes at $59 an hour; nobody was paid
+   per answer. Tuning needs about a thousand triple-labelled questions, which the savings table ignores.
+6. **Times are summed request durations**, with 4 parallel requests for Jev and 8 for the LLM.
+7. **The yardstick favours the expert.** Graded against the other two experts where they agree (969 to
+   1,000 questions): expert 93.3%, Jev alone 92.8%, LLM alone 87.3% (0.5 cut-off).
+8. **Baseline for "three experts on everything" was inflated.** Two experts everywhere plus a third on
+   their disagreements gives the same vote for 2,345 answers, $975, not $1,391.
+
 ## Data
 
 Files in `data/raw/`, copied from the authors' public folder
-(https://github.com/qinyiwei/InfoBench, `expert_annotation/`) and from
+(the Google Drive folder linked from https://github.com/qinyiwei/InfoBench) and from
 https://huggingface.co/datasets/kqsong/InFoBench:
 
 | File | What one row is | Rows used |
