@@ -7,7 +7,8 @@ from jev_rubric_judge.cli import jev_predictions, llm_predictions, part_items, F
 items = part_items("dev"); shown = {e["key"] for e in json.loads(FEWSHOT.read_text())}
 common = [i for i in items if i.key not in shown]
 y = np.array([i.correct for i in common]); groups = np.array([i.instruction_id for i in common]); ids = np.unique(groups)
-systems = {"Jev noul-fewshot": jev_predictions("dev", "noul-fewshot"), "Jev noul-instruction": jev_predictions("dev", "noul-instruction"), "LLM judge paper": llm_predictions("dev")[0], "LLM judge instruction": llm_predictions("dev", "instruction")[0], "LLM judge fewshot": llm_predictions("dev", "fewshot")[0]}
+systems = {f"Jev {v}": jev_predictions("dev", v) for v in ("noul-fewshot", "noul-instruction", "noul-plain", "noul-criteria")}
+systems |= {"LLM judge paper": llm_predictions("dev")[0], "LLM judge instruction": llm_predictions("dev", "instruction")[0], "LLM judge fewshot": llm_predictions("dev", "fewshot")[0]}
 for name, preds in systems.items():
     p = np.array([preds[i.key] for i in common])
     print(f"{name} | alone {int(round(metrics.accuracy(p, y) * len(y)))} of {len(y)} = {100 * metrics.accuracy(p, y):.1f}% | calibration error {metrics.calibration_error(p, y)[0]:.3f}")
