@@ -1,0 +1,11 @@
+{
+ "frozen_on": "2026-11-24",
+ "note": "Fixed on the dev set before any model saw the test set. Boundaries are picked on the 471 dev questions that are not few-shot examples.",
+ "rule": "Per system: the request variant that leaves the fewest questions to a human on the dev set, with boundaries under which at least 96% of the answers taken from the model are right on the dev set. 96% instead of 94.1%: boundaries tuned to exactly 94.1% on 10 dev instructions met 94.1% on the other 10 in 90 of 200 random halves (Jev noul-fewshot); with 96% in 135 of 200. The condition checked on the test set stays 94.1%.",
+ "condition_on_test": 0.941,
+ "systems": {
+  "Jev noul-fewshot": {"model": "jev-1.14.0", "t_yes": 0.83, "t_no": 0.42, "dev_human_per_100": 18.3, "dev_taken_right": "370 of 385"},
+  "LLM judge gpt-6-luna instruction": {"model": "gpt-6-luna", "repeats": 3, "t_yes": 0.69, "t_no": -0.01, "dev_human_per_100": 29.3, "dev_taken_right": "321 of 333"}
+ },
+ "dropped": "Rule 'Number questions go straight to a human': with it more questions are left to a human for every variant."
+}

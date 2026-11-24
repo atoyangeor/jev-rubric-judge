@@ -1,0 +1,147 @@
+[
+ {
+  "system": "Jev noul-plain",
+  "questions": 479,
+  "questions_missing": 0,
+  "alone_correct": 424,
+  "alone_accuracy": 0.8851774530271399,
+  "alone_accuracy_ci95": [
+   0.8541224972018406,
+   0.9153810234865356
+  ],
+  "t_yes": 0.79,
+  "t_no": 0.34,
+  "human_questions": 69,
+  "human_per_100": 14.405010438413361,
+  "human_per_100_ci95": [
+   10.141427919311365,
+   18.712330694944715
+  ],
+  "taken": 410,
+  "taken_correct": 386,
+  "taken_accuracy": 0.9414634146341463,
+  "taken_accuracy_ci95": [
+   0.9100194251696079,
+   0.9722238260200153
+  ],
+  "calibration_error": 0.03851774530271397,
+  "usd_one_expert_all": 199.19647577092513,
+  "usd_one_expert_left": 28.694273127753306
+ },
+ {
+  "system": "Jev noul-criteria",
+  "questions": 479,
+  "questions_missing": 0,
+  "alone_correct": 419,
+  "alone_accuracy": 0.8747390396659708,
+  "alone_accuracy_ci95": [
+   0.8435510216740671,
+   0.9070709305443818
+  ],
+  "t_yes": 0.66,
+  "t_no": 0.13,
+  "human_questions": 94,
+  "human_per_100": 19.62421711899791,
+  "human_per_100_ci95": [
+   14.704983460376814,
+   24.278196137397238
+  ],
+  "taken": 385,
+  "taken_correct": 363,
+  "taken_accuracy": 0.9428571428571428,
+  "taken_accuracy_ci95": [
+   0.9179477611940298,
+   0.9668683599646815
+  ],
+  "calibration_error": 0.04647181628392481,
+  "usd_one_expert_all": 199.19647577092513,
+  "usd_one_expert_left": 39.09074889867841
+ },
+ {
+  "system": "Jev noul-instruction",
+  "questions": 479,
+  "questions_missing": 0,
+  "alone_correct": 435,
+  "alone_accuracy": 0.9081419624217119,
+  "alone_accuracy_ci95": [
+   0.8777772211088845,
+   0.938343637596387
+  ],
+  "t_yes": 0.78,
+  "t_no": 0.42,
+  "human_questions": 52,
+  "human_per_100": 10.855949895615867,
+  "human_per_100_ci95": [
+   7.7091803742472615,
+   14.155251141552512
+  ],
+  "taken": 427,
+  "taken_correct": 402,
+  "taken_accuracy": 0.9414519906323185,
+  "taken_accuracy_ci95": [
+   0.9184652278177458,
+   0.9636384250669965
+  ],
+  "calibration_error": 0.028935281837160827,
+  "usd_one_expert_all": 199.19647577092513,
+  "usd_one_expert_left": 21.62466960352423
+ },
+ {
+  "system": "Jev noul-fewshot",
+  "questions": 471,
+  "questions_missing": 8,
+  "alone_correct": 426,
+  "alone_accuracy": 0.9044585987261147,
+  "alone_accuracy_ci95": [
+   0.8722940941460421,
+   0.9382430134013665
+  ],
+  "t_yes": 0.71,
+  "t_no": 0.42,
+  "human_questions": 42,
+  "human_per_100": 8.9171974522293,
+  "human_per_100_ci95": [
+   5.500569277681801,
+   12.690556764160823
+  ],
+  "taken": 429,
+  "taken_correct": 404,
+  "taken_accuracy": 0.9417249417249417,
+  "taken_accuracy_ci95": [
+   0.9119385540156955,
+   0.9714431115957832
+  ],
+  "calibration_error": 0.026220806794055158,
+  "usd_one_expert_all": 195.8696035242291,
+  "usd_one_expert_left": 17.466079295154184
+ },
+ {
+  "system": "LLM judge gpt-6-luna",
+  "questions": 479,
+  "questions_missing": 0,
+  "alone_correct": 422,
+  "alone_accuracy": 0.8810020876826722,
+  "alone_accuracy_ci95": [
+   0.846014408727918,
+   0.9177777777777778
+  ],
+  "t_yes": 0.53,
+  "t_no": -0.01,
+  "human_questions": 118,
+  "human_per_100": 24.63465553235908,
+  "human_per_100_ci95": [
+   17.923783515392252,
+   30.304896253172107
+  ],
+  "taken": 361,
+  "taken_correct": 342,
+  "taken_accuracy": 0.9473684210526315,
+  "taken_accuracy_ci95": [
+   0.9224587405495114,
+   0.9716500321252299
+  ],
+  "calibration_error": 0.10949305277346258,
+  "usd_one_expert_all": 199.19647577092513,
+  "usd_one_expert_left": 49.07136563876652
+ }
+]
