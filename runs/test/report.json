@@ -1,0 +1,60 @@
+[
+ {
+  "system": "Jev noul-fewshot",
+  "questions": 644,
+  "questions_missing": 0,
+  "alone_correct": 576,
+  "alone_accuracy": 0.8944099378881988,
+  "alone_accuracy_ci95": [
+   0.8661971830985915,
+   0.9176677474647118
+  ],
+  "t_yes": 0.83,
+  "t_no": 0.42,
+  "human_questions": 128,
+  "human_per_100": 19.875776397515526,
+  "human_per_100_ci95": [
+   15.419284919872606,
+   24.770845173337666
+  ],
+  "taken": 516,
+  "taken_correct": 480,
+  "taken_accuracy": 0.9302325581395349,
+  "taken_accuracy_ci95": [
+   0.9059228628000565,
+   0.9514174509120483
+  ],
+  "calibration_error": 0.03860248447204962,
+  "usd_one_expert_all": 267.81321585903083,
+  "usd_one_expert_left": 53.22995594713657
+ },
+ {
+  "system": "LLM judge gpt-6-luna instruction",
+  "questions": 644,
+  "questions_missing": 0,
+  "alone_correct": 542,
+  "alone_accuracy": 0.8416149068322981,
+  "alone_accuracy_ci95": [
+   0.8043839152309349,
+   0.8799315248523869
+  ],
+  "t_yes": 0.69,
+  "t_no": -0.01,
+  "human_questions": 162,
+  "human_per_100": 25.15527950310559,
+  "human_per_100_ci95": [
+   18.82240682532555,
+   31.395589083221218
+  ],
+  "taken": 482,
+  "taken_correct": 461,
+  "taken_accuracy": 0.9564315352697096,
+  "taken_accuracy_ci95": [
+   0.935261422768793,
+   0.9762956471067042
+  ],
+  "calibration_error": 0.1370739456859656,
+  "usd_one_expert_all": 267.81321585903083,
+  "usd_one_expert_left": 67.36916299559472
+ }
+]
