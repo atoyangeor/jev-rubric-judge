@@ -3,83 +3,62 @@
 ## The result, on our data
 
 **Data:** 1,115 real yes/no quality questions about LLM-written texts from the public dataset InFoBench.
-Three experts had already answered every question, so the right answer to each is known.
+Three experts had already answered every question.
 
 **What we did:** the model Jev answered first. A person answered only the questions Jev was unsure about.
 
 **What we got:**
 
-- **Same quality for a quarter of the price.** One expert on the unsure questions: his work cost
-  **$117 and not $464**, 2.0 hours and not 7.9, with the same share of right answers (94.0% against 94.1%).
-- **Closer to the three experts' answer, and still cheaper.** Three experts on the unsure questions:
-  the result matches the answer of the three experts on **96.7% of the questions for $352**. One expert
-  answering everything matches it on 94.1% for $464.
+- **Money:** the expert's work cost **$117 and not $464**. That is 75% less.
+- **Time:** the expert spent **2.0 hours and not 7.9**.
+- **Quality: not lower, slightly higher.** 94.9% right answers with Jev first, 93.3% when the expert
+  answers everything.
 - **Jev itself** cost **1.6 cents** and took **72 seconds** for all 1,115 questions.
 
-| # | Who answers the 1,115 questions | Expert answers needed | Experts' pay | Experts' time, person-hours | Model's bill | Model's time | Matches the answer of the three experts |
+| # | Who answers the 1,115 questions | Questions the expert answers | Expert's pay | Expert's time | Model's bill | Model's time | Right answers |
 |---|---|---|---|---|---|---|---|
-| 1 | One expert alone | 1,115 | $464 | 7.9 | no model | no model | 94.1% |
-| 2 | **Jev first, one expert on the rest** | **282** | **$117** | **2.0** | $0.016 | 72 seconds | **94.0%** |
-| 3 | **Jev first, three experts on the rest** | **846** (282 questions × 3) | **$352** | **6.0** | $0.016 | 72 seconds | **96.7%** |
-| 4 | Jev first and stricter, three experts on the rest | 1,296 (432 questions × 3) | $539 | 9.1 | $0.016 | 72 seconds | 97.9% |
-| 5 | Jev first and strictest, three experts on the rest | 1,920 (640 questions × 3) | $798 | 13.5 | $0.016 | 72 seconds | 98.7% |
-| 6 | Two experts on everything, a third only where the two disagree | 2,345 | $975 | 16.5 | no model | no model | 100% by definition |
-| 7 | An ordinary LLM first, one expert on the rest | 308 | $128 | 2.2 | $0.20 | 74 minutes | 94.2% |
-| 8 | An ordinary LLM first, three experts on the rest | 924 (308 questions × 3) | $384 | 6.5 | $0.20 | 74 minutes | 97.0% |
-| 9 | Jev alone, no expert | 0 | $0 | 0 | $0.016 | 72 seconds | 89.9% |
-| 10 | An ordinary LLM alone, no expert | 0 | $0 | 0 | $0.20 | 74 minutes | 84.7% |
+| 1 | The expert alone | 1,115 | $464 | 7.9 hours | no model | no model | 93.3% |
+| 2 | **Jev first, the expert on the rest** | **282** | **$117** | **2.0 hours** | **$0.016** | **72 seconds** | **94.9%** |
+| 3 | An ordinary LLM first, the expert on the rest | 308 | $128 | 2.2 hours | $0.20 | 74 minutes | 95.1% |
+| 4 | Jev alone, no expert | 0 | $0 | 0 | $0.016 | 72 seconds | 92.8% |
+| 5 | An ordinary LLM alone, no expert | 0 | $0 | 0 | $0.20 | 74 minutes | 91.1% |
 
 **In words:**
 
-1. **Same quality, a quarter of the price** (row 2 against row 1). Jev answers what it is sure about,
-   one expert answers the rest.
-2. **Closer to the three experts and cheaper** (row 3 against row 1). Send the unsure questions to three
-   experts and not one: the result matches the three experts' answer on 96.7% of the questions for $352,
-   against 94.1% for $464 with one expert alone.
-3. **You can get closer still by making Jev stricter** (rows 4 and 5). Jev then takes fewer answers and
-   more questions go to the three experts: 97.9% for $539, 98.7% for $798. The cheapest way to get the
-   three experts' answer on every question costs $975 (row 6), so the strictest row saves 18%.
-   Read these rows with care: a question sent to the three experts counts as matched automatically,
-   so part of the gain from row 3 to row 5 comes only from sending more questions to them.
-4. **Making Jev stricter does not help if only one expert answers the rest.** The total stays at 94%
-   whatever the setting, because one expert is himself right only 94 times out of 100. To go higher, the
-   unsure questions need more than one person. That is why rows 3 to 5 use three.
-5. **An ordinary LLM** (`gpt-6-luna`) does the first two jobs about as well (rows 7 and 8). It is 4 times
-   more expensive and 20 times slower than Jev when asked each question once. We asked it three times
-   per question (12 and 60 times), and afterwards saw that one time gives the same result. We could not
-   test stricter settings for it: its sureness came back as exactly 1.000 for 716 of the 1,115 questions,
-   and such answers cannot be ranked. That is a limit of how we asked, not a proven limit of the LLM.
-6. **With no expert**, Jev matched the three experts on 1,002 questions and the ordinary LLM on 944 (row
-   9 against row 10). Part of that gap is our rule "a number above 0.5 means yes", which does not suit
-   this LLM: its numbers lean towards "no". With the cut-off tuned for each model on the tuning
-   questions, the LLM gets 564 of the 644 check-1 questions and Jev 575. That gap, 2 out of 100, is too
-   small for our data to confirm.
-7. **Jev alone is close to one expert when the expert does not grade himself.** Take the questions where
-   two experts agree and grade the third expert, Jev and the LLM against those two: the expert matches
-   them on 93.3% of the questions, Jev on 92.8%, the LLM on 87.3% (with the 0.5 rule).
+1. **Put Jev in front of the expert: you pay for a quarter of his work and the quality does not drop**
+   (row 2 against row 1). It even goes up a little, by 1.6 points.
+2. **Why it can go up.** On the questions Jev is sure about, Jev is right more often than a single
+   person: 97.4% against 95.3%.
+3. **An ordinary LLM** (`gpt-6-luna`) does the same job equally well (row 3), but costs 4 to 12 times
+   more than Jev and is 20 to 60 times slower.
+4. **With no expert at all**, Jev is almost at the level of one person: 92.8% against 93.3%. The
+   ordinary LLM is lower: 91.1% at best.
 
-"100% by definition" in row 6: the right answer to a question is the answer of at least two of the three
-experts, so three experts together always match it. For the same reason, in rows 3, 4, 5 and 8 every
-question that goes to the three experts counts as matched; the misses in those rows are Jev's (or the
-LLM's) own. These numbers say how close a process gets to the three experts' answer. Whether the three
-experts themselves are right, nobody has checked.
+**How "right answers" is counted.** Two of the three experts act as judges. Where the two judges agree,
+their answer is the right answer. The third expert is "the person": he and the model are both graded by
+the two judges. Each expert takes the role of the person in turn. Section 5 explains why.
 
-**One thing to know before trusting this.** We checked "Jev first, one expert on the rest" twice. In the first, stricter check
-Jev's answers were right 93 times out of 100 where 94 were needed. In the second check, with more data
-for tuning, they passed (96 out of 100). The table above is the second check. Both checks are described
-in section 8 with nothing left out; every table and the exact method are in [DETAILS.md](DETAILS.md).
+**Three things to know before trusting this.**
+
+1. Two decisions were made after we had seen first results: to tune on more data (section 8, check 2)
+   and to grade the person and the model the same way (section 5). Both have a reason, both are
+   described in full, and section 9 shows what the numbers were before each of them.
+2. In our very first check, done exactly as planned in advance, Jev fell one point short of the bar:
+   93 right answers out of 100 where 94 were needed.
+3. The data is small: 50 tasks. Differences of 1 to 2 points are at the edge of what it can show.
 
 Where the numbers in the table come from:
 
 - Expert's pay and time: one expert answer costs $0.42 and takes 25 seconds (section 1); multiply by
   the number of questions the expert answers.
-- Model's bill: what TypeSafe and OpenAI charged for our own run on these questions.
-- Model's time: measured by us once, from one laptop. The ordinary LLM was asked every question three
-  times (its sureness jumps between tries); asked once it costs $0.07 and takes 25 minutes.
-- Right answers and the number of questions left to the experts: section 7 (rows 9, 10), section 8,
-  check 2 (rows 2, 7), and `runs/crossval_strict.txt` (rows 3, 4, 5, 8). "Stricter" and "strictest" mean
-  that the answers taken from Jev had to be right 97 and 98 times out of 100 on the tuning questions,
-  where rows 2 and 3 ask for 96.
+- Model's bill: what our own run on these questions cost at the price lists of TypeSafe and OpenAI.
+- Model's time: the sum of the waiting times of all requests, measured once, from one laptop. The
+  ordinary LLM was asked every question three times; we later saw that once gives the same result,
+  which would be $0.07 and 25 minutes.
+- Right answers: `runs/fair_yardstick.txt`. Row 5 uses the best cut-off for the LLM; with the same
+  simple rule as Jev ("above 0.5 means yes") it is 87.3%.
+
+Every table and the exact method are in [DETAILS.md](DETAILS.md).
 
 ## 1. The problem
 
@@ -142,20 +121,34 @@ To check a model you need questions whose right answer is already known.
 
 We took a public dataset called InFoBench. It has 1,135 questions like the ones above, and **three
 experts have already answered every one of them.** We removed 12 questions where one expert's answer is
-missing. 1,123 are left.
+missing, and gave 8 to Jev as examples of how to answer. 1,115 are left.
 
-**The right answer** to a question is the one at least two of the three experts gave. Three are needed
-because one person can make a mistake, and two rarely make the same one.
+## 5. How we decide who is right
 
-## 5. What "as good as a person" means
+We want to compare Jev with one person. So we need a right answer for every question, and a fair way to
+grade both.
 
-We need one number: how often is one person right?
+**The obvious way, and why it is unfair.** Let the three experts vote; the right answer is what at least
+two of them said. Now grade one of those experts against it. His own vote is part of the right answer.
+Look at a question where the other two disagree:
 
-Take each of the three experts separately and count how often his answer equals the right answer:
-95, 94 and 93 questions out of 100. **On average 94 out of 100.**
+| Expert B | Expert C | Expert A says | The vote | Is expert A right? |
+|---|---|---|---|---|
+| yes | no | yes | yes (two against one) | yes |
+| yes | no | no | no (two against one) | yes |
 
-That is the bar for Jev. The answers we take from Jev must be right at least 94 times out of 100. Then
-Jev makes mistakes no more often than a person does.
+Whatever expert A says, he is right, because his vote decides. Jev has no vote, so on the same question
+it can be wrong. This happens in about 1 question out of 9. Graded this way a person looks better than
+he is: 94.1%.
+
+**The fair way.** Take two experts as judges. Where the two judges agree, their answer is the right
+answer. The third expert is "the person", and he had no part in it. Grade the person and Jev against the
+two judges in exactly the same way. Then let each expert be the person in turn and average.
+
+Graded this way, **one person is right 93.3 times out of 100.** That is the level to beat.
+
+What this leaves out: the questions where the two judges disagree, about 1 in 9. There is no right
+answer to grade against, so nobody is graded on them. These are the hardest questions.
 
 ## 6. What we compared Jev with
 
@@ -171,22 +164,23 @@ Here there is no person at all. The model answers all 1,115 questions.
 
 | # | Who answers | Right answers | Cost of all 1,115 answers | Time for all 1,115 answers |
 |---|---|---|---|---|
-| 1 | Jev | 1,002 of 1,115 (90 out of 100) | $0.016 | 72 seconds |
-| 2 | Ordinary LLM | 944 of 1,115 (85 out of 100) | $0.20 | 74 minutes |
-| 3 | One expert | 94 out of 100 | $464 | 7.9 hours |
+| 1 | Jev | 92.8% | $0.016 | 72 seconds |
+| 2 | Ordinary LLM | 91.1% at best | $0.20 | 74 minutes |
+| 3 | One person | 93.3% | $464 | 7.9 hours |
 
-**Guess 1 is confirmed, with a caveat.** Jev is right at least as often as the ordinary LLM, costs 4 to
-12 times less and is 20 to 60 times faster (the lower figures are for asking the LLM once per question,
-which turned out to be enough). How much more often Jev is right depends on the cut-off: 5 out of 100
-with the 0.5 rule used in this table, 2 out of 100 with a cut-off tuned for each model.
+**Guess 1 is confirmed.** Jev is right at least as often as the ordinary LLM, costs 4 to 12 times less
+and is 20 to 60 times faster.
 
-Where the numbers come from:
+Details behind the table:
 
-- 1,115 questions and not 1,123, because 8 questions were given to Jev as examples of how to answer.
-- Cost: the bill for our own run on these questions. The expert: 1,115 × $0.42.
-- Time: we measured it ourselves, once, from one laptop. On another day it may differ.
-- We asked the ordinary LLM every question three times, because its sureness jumps from one try to the
-  next. Asked once, it costs $0.07 and takes 25 minutes; then Jev is 4 times cheaper and 20 times faster.
+- "At best" for the LLM: a model's number has to be turned into "yes" or "no" by a cut-off. With the
+  simple rule "above 0.5 means yes" Jev gets 92.8% and the LLM 87.3%. This LLM's numbers lean towards
+  "no", so the simple rule is unfair to it. With the best cut-off for each model, found on other
+  questions, the LLM gets 91.1% and Jev 92.2%.
+- Jev against the person: 0.5 points apart. That is too small for our data to tell them apart. The LLM
+  at its best is 2.2 points below the person, and that gap is confirmed.
+- 4 and 20 times are for asking the LLM once per question; 12 and 60 for three times, as we ran it.
+- Time was measured once, from one laptop. On another day it may differ.
 
 ## 8. Result 2: Jev first, the person on the rest
 
@@ -197,95 +191,121 @@ questions is like a student who has seen the exam in advance: the score comes ou
 
 We did this twice.
 
-### Check 1: tuned on a small part, checked on the rest. Missed by one point
+### Check 1: tuned on a small part, checked on the rest
 
 We split the questions into two piles: 479 for tuning and 644 for checking. Tuning gave this rule:
 0.83 and above, take "yes"; 0.42 and below, take "no"; anything in between goes to the person.
 
-On the 644 questions:
+On the 644 questions Jev was sure about 516. The person was left with 128: **20 out of 100.**
 
-- Jev was sure about 516. The person was left with 128. That is **20 out of 100**: five times less work.
-- Of Jev's 516 answers, 480 were right. That is **93 out of 100**.
-- The bar is 94 out of 100, which is 486 right answers. **Jev was 6 answers short.**
+| # | What is compared, on the questions Jev was sure about | Jev | The person |
+|---|---|---|---|
+| 1 | Right answers | 95.4% | 94.2% |
 
-The ordinary LLM in the same role left the person 25 questions out of 100 and passed the bar: 461 right
-answers out of 482, which is 96 out of 100.
+Jev and the person together were right on 93.9% of the 644 questions; the person alone on 92.9%.
 
-Why Jev fell short. Its "yes" answers were fine: 433 right out of 450. Its "no" answers were not: only
-47 right out of 66. On the 479 tuning questions its "no" answers had been right 51 times out of 52, so
-tuning decided to trust them. The tuning pile was too small to show the problem.
+Jev is ahead by about one point in both lines. With this amount of data a one-point gap can be chance,
+so the careful reading is: **Jev was not worse than the person.**
 
-### Check 2: tuned on most of the data, checked on the rest, in turns. Passed
+### Check 2: tuned on most of the data, checked on the rest, in turns
 
 To give tuning more data, we did it in turns. The questions come from 50 different tasks. Tune on the
 questions of 45 tasks, check on the other 5. Then take another 5 for checking, and so on, until every
-question has been checked by a rule that was tuned without it. Then repeat the whole thing 20 times
-with a different split and average.
+question has been checked by a rule that was tuned without it.
 
-| # | Who answers first | Questions out of 100 left to the person | Right answers out of 100 among those taken from the model | The bar: 94 | Right answers out of 100 for model and person together |
-|---|---|---|---|---|---|
-| 1 | Jev | 25 | 96 | passed | 94 |
-| 2 | Ordinary LLM | 28 | 96 | passed | 94 |
-| 3 | The person alone | 100 | the person answers everything | no model | 94 |
+| # | Who answers first | Questions out of 100 left to the person | Right answers on the questions taken from the model: the model | The person on those same questions | Model and person together | The person alone |
+|---|---|---|---|---|---|---|
+| 1 | Jev | 25 | 97.4% | 95.3% | 94.9% | 93.3% |
+| 2 | Ordinary LLM | 28 | 97.6% | 95.3% | 95.1% | 93.3% |
 
-**With Jev first, the person does a quarter of the work, and the result is as accurate as the person
-alone: 94 out of 100.** This is the average. When we tuned on 40 randomly chosen tasks and checked on the
-other 10, 300 times over, the answers taken from Jev fell below the bar in about 1 run out of 6.
+**With Jev first, the person does a quarter of the work, and the result is right more often than the
+person alone: 94.9% against 93.3%.** Here the gap, 1.6 points, is large enough to be confirmed: when we
+reshuffled the tasks 2,000 times it stayed between 0.2 and 3.0 points in 95% of the reshuffles.
 
 In money and time, on our 1,115 questions: the expert answers 282 questions and not 1,115. That is $117
 and not $464, and 2.0 hours and not 7.9. Jev itself adds 1.6 cents and 72 seconds.
-
-Exact figures behind the table: Jev's taken answers were right 95.6% of the time, the ordinary LLM's
-95.8%; together with the person 94.0% and 94.2%; the person alone 94.1%.
 
 ### What the two checks say about our guesses
 
 | # | Guess | Check 1 | Check 2 |
 |---|---|---|---|
 | 2a | The person is left with fewer than half of the questions | Yes: 20 out of 100 | Yes: 25 out of 100 |
-| 2b | Answers taken from Jev are right at least as often as a person's (94 out of 100) | No: 93 | Yes: 96 |
-| 3 | Jev with a person is at least as good as an ordinary LLM with a person | No: only the LLM passed the bar | Yes: both passed, and Jev left the person slightly less work |
+| 2b | Answers taken from Jev are right at least as often as a person's | Yes by the numbers (95.4% against 94.2%); the gap is too small to be sure | Yes, confirmed (97.4% against 95.3%) |
+| 3 | Jev with a person is at least as good as an ordinary LLM with a person | The LLM pair is 0.9 points ahead (94.8% against 93.9% together with the person); the gap is too small to be sure | Equal: 94.9% and 95.1%; Jev leaves the person slightly less work and costs less |
 
-## 9. Which check to believe
+## 9. What changed along the way, with nothing hidden
 
-Both are true, and they answer slightly different questions.
+We made two decisions after seeing first results. A reader should know both, and what the numbers were
+before them.
 
-- **Check 1 is the strict one.** Its plan was written down and saved before the 644 questions were
-  touched. Nobody could adjust anything after seeing the answers. It shows what happens when you tune on
-  very little data: the rule can come out too loose, and you miss the bar.
-- **Check 2 uses more data for tuning, and that fixed the problem.** But we came up with it after seeing
-  the result of check 1. A sceptic can say: you kept trying until it worked. The honest reply: every
-  question in check 2 was still judged by a rule tuned without it, and nothing was fitted by hand.
-  A third check on fresh questions would settle it.
+**Decision 1: tune on more data (check 2).** Check 1 was planned and saved before the 644 questions were
+touched. Check 2 was added afterwards. Every question in check 2 is still judged by a rule tuned without
+it, and nothing was adjusted by hand.
 
-Practical takeaway: tune on as many labeled questions as you can, and check "yes" and "no" answers
-separately before trusting either.
+**Decision 2: grade the person and the model the same way (section 5).** In the first version the right
+answer was the vote of all three experts, including the person being graded. An independent review of
+this work pointed out that this favours the person. We changed the grading for everyone.
 
-## 10. How far to trust all of this
+| # | Check | How the right answer was decided | Jev's taken answers | The level to reach | Reached? |
+|---|---|---|---|---|---|
+| 1 | Check 1, as first planned | Vote of three, the person's own vote included | 93.0% | 94.1% | No, one point short |
+| 2 | Check 1 | Two judges, the person graded like the model | 95.4% | 94.2% | Yes by the numbers, gap too small to be sure |
+| 3 | Check 2 | Vote of three, the person's own vote included | 95.6% | 95.7% | Equal |
+| 4 | Check 2 | Two judges, the person graded like the model | 97.4% | 95.3% | Yes, confirmed |
 
+"The level to reach" in rows 2 to 4 is how often one person is right on the very same questions.
+
+A sceptic can say: you kept changing things until it worked. The honest reply: row 1 is the only result
+that was fully planned in advance, and it is a miss by one point. Rows 2 to 4 each fix a specific flaw
+(too little data for tuning; a grading rule that favours the person), and each flaw can be checked by
+anyone with the files in this repository. A new set of questions, graded the fair way from the start,
+would settle it.
+
+## 10. If you want the answer of three experts, not one
+
+Some teams want every answer to match what three experts would say together. Then send the questions
+Jev is unsure about to three experts and not one. In this table "matches" means: equals the vote of the
+three experts. A question that goes to the three experts matches automatically.
+
+| # | Who answers the 1,115 questions | Expert answers needed | Experts' pay | Matches the vote of three experts |
+|---|---|---|---|---|
+| 1 | One expert alone | 1,115 | $464 | 94.1% |
+| 2 | Jev first, three experts on the rest | 846 (282 questions × 3) | $352 | 96.7% |
+| 3 | Jev first and stricter, three experts on the rest | 1,296 (432 questions × 3) | $539 | 97.9% |
+| 4 | Jev first and strictest, three experts on the rest | 1,920 (640 questions × 3) | $798 | 98.7% |
+| 5 | Two experts on everything, a third only where the two disagree | 2,345 | $975 | 100% by definition |
+
+Read this table with care: part of the gain from row 2 to row 4 comes only from sending more questions
+to the three experts, where a match is automatic. Whether the three experts themselves are right, nobody
+has checked.
+
+## 11. How far to trust all of this
+
+- **Few questions.** 1,115 questions from 50 tasks. Gaps of one point cannot be told from chance.
+- **Fair grading leaves out the hardest questions**, about 1 in 9, where the two judges disagree.
 - **The expert's price is an estimate** (section 1), and the saving ignores one cost: to tune Jev you
   first need about a thousand questions answered by three experts. The saving starts after that.
-- **Few questions.** 1,123 questions from 50 tasks. The gap between 93 and 94 out of 100 in check 1 is
-  6 answers. On another set of questions it could go either way.
+- **Results vary from run to run.** Tuned on a different set of tasks, Jev's answers come out a little
+  better or a little worse; check 1 and check 2 show the spread.
 - **One ordinary LLM, a cheap one.** A stronger one might answer better.
-- **Speed was measured once, from one laptop.**
+- **Speed was measured once, from one laptop**, as the sum of the waiting times of all requests.
 - **The texts are old.** They were written by 2023 models, in English only.
-- **Three people per question are the yardstick.** If two of them are wrong and the model is right, we
-  count the model as wrong.
 
-## 11. Run it yourself
+## 12. Run it yourself
 
 ```
 uv sync
 cp .env.example .env            # put TYPESAFE_API_KEY and OPENAI_API_KEY there; never commit .env
 uv run pytest
-uv run python runs/crossval.py              # check 2
+uv run python runs/fair_yardstick.py        # the fair grading: alone, check 1, check 2
+uv run python runs/crossval.py              # check 2 with the first grading
+uv run python runs/crossval_strict.py       # section 10
 uv run python -m jev_rubric_judge.cli report --part test --variants noul-fewshot \
-  --thresholds '{"Jev noul-fewshot": [0.83, 0.42], "LLM judge gpt-6-luna instruction": [0.69, -0.01]}'   # check 1
+  --thresholds '{"Jev noul-fewshot": [0.83, 0.42], "LLM judge gpt-6-luna instruction": [0.69, -0.01]}'   # check 1, first grading
 ```
 
-Every model answer is saved in `runs/`, so these commands cost nothing. The full method, all tables and
-the list of weak points are in [DETAILS.md](DETAILS.md).
+Every model answer is saved in `runs/`, so these commands cost nothing. The full method, all tables, the
+independent review and the list of weak points are in [DETAILS.md](DETAILS.md).
 
-Sources: InFoBench paper https://arxiv.org/abs/2401.03601 (costs and time of the experts, Table 4);
+Sources: InFoBench paper https://arxiv.org/abs/2401.03601 (time and cost of the experts, Table 4);
 data https://github.com/qinyiwei/InfoBench; Jev https://docs.typesafe.ai. Last updated 2026-11-24.

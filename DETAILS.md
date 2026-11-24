@@ -216,6 +216,29 @@ with each of the three experts in turn:
 | LLM judge, then one expert | 93.2%, 94.3%, 94.7% | 94.0% |
 | One expert alone | 94.4%, 94.7%, 92.2% | 93.8% |
 
+## Fair yardstick (`runs/fair_yardstick.py`, output in `runs/fair_yardstick.txt`)
+
+Added after the independent review. In all tables above, "one expert's level" grades an expert against
+the vote of three experts, one of which is his own; a model has no vote. Here everyone is graded the
+same way: two experts are the reference, on the questions where those two agree (969, 980 and 1,000 of
+the 1,115 questions for the three possible pairs); the third expert is "the person". Each expert takes
+that role in turn; numbers are the mean of the three. Boundaries are not retuned: check 1 uses the
+frozen pair, check 2 the same cross-validation as above (tuning labels are still the vote of three on
+the training instructions). Intervals: bootstrap over instructions, 2,000 resamples.
+
+| What | Jev | LLM judge | One person |
+|---|---|---|---|
+| Alone, all questions, 0.5 rule | 92.8% (minus the person −0.5, interval −2.7 to 1.3) | 87.3% (−6.0, −8.6 to −3.4) | 93.3% |
+| Alone, cut-off tuned on other instructions | 92.2% (−1.1, −3.2 to 1.3) | 91.1% (−2.2, −4.6 to −0.5) | 93.3% |
+| Check 1, taken answers | 95.4%; the person on the same questions 94.2% (+1.2, −2.4 to 3.8) | 97.3%; the person 94.9% (+2.5, −0.2 to 4.8) | see the cells on the left |
+| Check 1, whole process | 93.9%; the person alone 92.9% (+1.0, −2.0 to 3.1) | 94.8% (+1.9, −0.2 to 3.7) | 92.9% |
+| Check 2, taken answers (mean of 20 cuts) | 97.4%; the person 95.3% (+2.3, 0.3 to 3.9 on the first cut) | 97.6%; the person 95.3% (+2.4, 0.5 to 4.1) | see the cells on the left |
+| Check 2, whole process (mean of 20 cuts) | 94.9% (+1.7, 0.2 to 3.0 on the first cut) | 95.1% (+1.8, 0.4 to 3.0) | 93.3% |
+
+What this yardstick leaves out: the questions where the two reference experts disagree (10 to 13%),
+which are the hardest ones. What it does not fix: the tuning labels come from all three experts, so the
+boundaries were tuned with the reference experts' votes on other questions.
+
 ## Independent review, 2026-11-24
 
 A separate reviewer recomputed every headline number from the raw files with its own code (all
