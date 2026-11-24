@@ -68,8 +68,11 @@ response:    Vaswani, Ashish, et al. "Attention Is All You Need." arXiv, 2017, h
 
 Counts:
 
-- 50 instructions × 5 responses, 1,135 questions. Twelve questions (two `alpaca-7b` responses) have
-  unreadable expert cells and are dropped: **1,123 questions**.
+- 50 instructions × 5 responses, 1,135 questions. Twelve questions (two `alpaca-7b` responses, six
+  questions each) are dropped: for `domain_oriented_task_153` the second expert's cell is empty, for
+  `domain_oriented_task_139` the third expert's cell holds five answers for six questions (`1.1.0.0.0.`).
+  **1,123 questions** remain. One dropped response falls in the dev set and one in the test set, hence
+  99 and 149 responses below.
 - The correct answer is "yes" in 929 of 1,123 (82.7%).
 - **One expert's level.** Each expert's answer equals the correct answer in 1,071, 1,060 and 1,040 of
   1,123 questions (95.4%, 94.4%, 92.6%); the mean is **94.1%**. This is the quality bar.
@@ -146,7 +149,14 @@ Rows 1 and 5 went to the test set.
 | # | Model | Right without a human | Questions per 100 left to a human | Answers taken from the model that are right | Condition 94.1% |
 |---|---|---|---|---|---|
 | 1 | Jev `noul-fewshot` | 576 of 644, 89.4% (86.6–91.8) | 19.9: 128 of 644 (15.4–24.8) | 480 of 516, 93.0% (90.6–95.1) | **Not met**; 486 right answers were needed |
-| 2 | LLM judge `gpt-6-luna`, with instruction | 542 of 644, 84.2% (80.4–88.0) | 25.2: 162 of 644 (18.8–31.4) | 461 of 482, 95.6% (93.5–97.6) | Met |
+| 2 | LLM judge `gpt-6-luna`, with instruction | 542 of 644, 84.2% (80.4–88.0) | 25.2: 162 of 644 (18.8–31.4) | 461 of 482, 95.6% (93.5–97.6) | Met by the number itself (454 were needed); the interval also contains 94.1 |
+
+Jev against the LLM judge on the same resampled instructions (paired bootstrap, 2,000 resamples):
+
+| What is compared | Jev minus LLM judge | 95% interval | Reading |
+|---|---|---|---|
+| Questions per 100 left to a human | −5.3 | −13.0 to 1.8 | Contains 0: that Jev leaves fewer questions is not established |
+| Share of taken answers that are right, points | −2.6 | −5.0 to −0.5 | Does not contain 0: the answers taken from Jev are right less often |
 
 The example from the data section, as it went through the test run:
 
@@ -195,7 +205,26 @@ the condition because it took no "no" answers at all. "Take only yes from Jev" i
 seeing the test set. It is not a result, and there is no unseen expert-labeled data left in InFoBench
 to check it.
 
+Taking only "yes" from Jev on the test set would give 433 of 450 right (96.2%, interval 94.2–98.1) and
+leave 194 of 644 questions to a human: 30.1 per 100, more than the LLM judge's 25.2.
+
 Of the 36 wrong answers taken from Jev, 22 are on questions where the experts themselves disagreed.
+
+### How one expert does on the same questions (computed after the run)
+
+The 94.1% bar is one expert's level on all questions. The questions a model is sure of are the easier
+ones, and experts are right on them more often too:
+
+| Test set questions | How many | One expert right (mean of three) | The model right |
+|---|---|---|---|
+| All | 644 | 93.8% | not applicable |
+| Taken from Jev | 516 | 94.8% | 93.0% |
+| Left to a human by Jev | 128 | 89.8% | not applicable |
+| Taken from the LLM judge | 482 | 95.3% | 95.6% |
+| Left to a human by the LLM judge | 162 | 89.3% | not applicable |
+
+So on the questions it took, Jev is 1.8 points below one expert, and the LLM judge is level with one.
+The questions left to the human are the ones where a single expert is right only about 9 times in 10.
 
 ## Cost and speed
 
@@ -226,12 +255,15 @@ Of the 36 wrong answers taken from Jev, 22 are on questions where the experts th
 8. **Reference numbers are not on the same questions.** 84% (crowd workers) and 89% (GPT-4) are the
    paper's numbers on all 1,135 questions; ours are on the 644 test questions. GPT-4 in the paper also
    answered the questions of one response in one conversation, not one call per question.
-9. **One LLM judge, cheap tier, reasoning off, one-word answer.** A stronger model, reasoning, or a
+9. **The LLM judge variant was chosen for routing, not for accuracy alone.** Its 84.2% without a human
+   is below always answering "yes" (84.9%). On the dev set the paper's prompt was better without a human
+   (87.9% against 85.4%); it was not run on the test set.
+10. **One LLM judge, cheap tier, reasoning off, one-word answer.** A stronger model, reasoning, or a
    different way of getting a probability may do better. The comparison says nothing about them.
-10. **Only yes and no.** InFoBench has no "not applicable" or "can't tell" labels, so those answers are
+11. **Only yes and no.** InFoBench has no "not applicable" or "can't tell" labels, so those answers are
     not tested.
-11. **Old responses, English only.** The responses were written by 2023 models.
-12. **The third expert's column is assumed** from its name (see Data).
+12. **Old responses, English only.** The responses were written by 2023 models.
+13. **The third expert's column is assumed** from its name (see Data).
 
 ## Risks if someone uses this as is
 
@@ -277,7 +309,7 @@ for a dry run.
 | `src/jev_rubric_judge/cli.py` | `prepare`, `run-jev`, `run-llm`, `report` |
 | `data/split.json`, `data/frozen.json` | The split and the settings fixed before the test run |
 | `runs/dev`, `runs/test` | Cached answers and `report.json` |
-| `runs/dev_checks.py`, `runs/dev_margin.py`, `runs/test_breakdown.py` | The extra checks quoted above |
+| `runs/dev_checks.py`, `runs/dev_margin.py`, `runs/test_breakdown.py`, `runs/test_extra.py` | The extra checks quoted above |
 
 ## Sources
 
