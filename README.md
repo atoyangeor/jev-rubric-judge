@@ -9,30 +9,49 @@ Three experts had already answered every question, so the right answer to each i
 
 **What we got:**
 
-- **Money:** the expert's work cost **$117 and not $464**. That is 75% less.
-- **Time:** the expert spent **2.0 hours and not 7.9**.
-- **Quality:** **the same.** 94.0% right answers with Jev first, 94.1% when the expert answers everything.
+- **Same quality for a quarter of the price.** One expert on the unsure questions: his work cost
+  **$117 and not $464**, 2.0 hours and not 7.9, with the same share of right answers (94.0% against 94.1%).
+- **Better quality and still cheaper.** Three experts on the unsure questions: **96.7% right answers for
+  $352**. One expert answering everything gives 94.1% for $464.
 - **Jev itself** cost **1.6 cents** and took **72 seconds** for all 1,115 questions.
 
-| # | Who answers the 1,115 questions | Questions the expert answers | Expert's pay | Expert's time | Model's bill | Model's time | Right answers |
+| # | Who answers the 1,115 questions | Expert answers needed | Experts' pay | Experts' time, person-hours | Model's bill | Model's time | Right answers |
 |---|---|---|---|---|---|---|---|
-| 1 | The expert alone | 1,115 | $464 | 7.9 hours | no model | no model | 94.1% |
-| 2 | **Jev first, the expert on the rest** | **282** | **$117** | **2.0 hours** | **$0.016** | **72 seconds** | **94.0%** |
-| 3 | An ordinary LLM first, the expert on the rest | 308 | $128 | 2.2 hours | $0.20 | 74 minutes | 94.2% |
-| 4 | Jev alone, no expert | 0 | $0 | 0 | $0.016 | 72 seconds | 89.9% |
-| 5 | An ordinary LLM alone, no expert | 0 | $0 | 0 | $0.20 | 74 minutes | 84.7% |
+| 1 | One expert alone | 1,115 | $464 | 7.9 | no model | no model | 94.1% |
+| 2 | **Jev first, one expert on the rest** | **282** | **$117** | **2.0** | $0.016 | 72 seconds | **94.0%** |
+| 3 | **Jev first, three experts on the rest** | **846** (282 questions × 3) | **$352** | **6.0** | $0.016 | 72 seconds | **96.7%** |
+| 4 | Jev first and stricter, three experts on the rest | 1,296 (432 questions × 3) | $539 | 9.1 | $0.016 | 72 seconds | 97.9% |
+| 5 | Jev first and strictest, three experts on the rest | 1,920 (640 questions × 3) | $798 | 13.5 | $0.016 | 72 seconds | 98.7% |
+| 6 | Three experts on everything | 3,345 (1,115 questions × 3) | $1,391 | 23.6 | no model | no model | 100% by definition |
+| 7 | An ordinary LLM first, one expert on the rest | 308 | $128 | 2.2 | $0.20 | 74 minutes | 94.2% |
+| 8 | An ordinary LLM first, three experts on the rest | 924 (308 questions × 3) | $384 | 6.5 | $0.20 | 74 minutes | 97.0% |
+| 9 | Jev alone, no expert | 0 | $0 | 0 | $0.016 | 72 seconds | 89.9% |
+| 10 | An ordinary LLM alone, no expert | 0 | $0 | 0 | $0.20 | 74 minutes | 84.7% |
 
 **In words:**
 
-1. Put Jev in front of the expert and you keep the expert's quality while paying for a quarter of his
-   work (row 2 against row 1).
-2. An ordinary LLM (`gpt-6-luna`) can do the same job, but it is about 12 times more expensive and 60
-   times slower than Jev, and it leaves the expert slightly more work (row 3 against row 2).
-3. With no expert at all, Jev is right on 5 more questions out of every 100 than the ordinary LLM
-   (row 4 against row 5). Neither is as good as the expert, which is why the expert stays for the hard
-   questions.
+1. **Same quality, a quarter of the price** (row 2 against row 1). Jev answers what it is sure about,
+   one expert answers the rest.
+2. **Better quality and cheaper** (row 3 against row 1). Send the unsure questions to three experts and
+   not one: 96.7% right for $352, against 94.1% for $464.
+3. **You can buy more accuracy by making Jev stricter** (rows 4 and 5). Jev then takes fewer answers and
+   more questions go to the three experts: 97.9% for $539, 98.7% for $798. Even the strictest row is 43%
+   cheaper than three experts on everything ($1,391).
+4. **Making Jev stricter does not help if only one expert answers the rest.** The total stays at 94%
+   whatever the setting, because one expert is himself right only 94 times out of 100. To go higher, the
+   unsure questions need more than one person. That is why rows 3 to 5 use three.
+5. **An ordinary LLM** (`gpt-6-luna`) does the first two jobs about as well (rows 7 and 8), but it is
+   about 12 times more expensive and 60 times slower than Jev. And it cannot be made stricter: under the
+   setting of row 5 it takes no answers at all, so everything goes to the experts.
+6. **With no expert**, Jev is right on 5 more questions out of every 100 than the ordinary LLM (row 9
+   against row 10). Neither is as good as an expert.
 
-**One thing to know before trusting this.** We checked rows 2 and 3 twice. In the first, stricter check
+"100% by definition" in row 6: the right answer to a question is the answer of at least two of the three
+experts, so three experts together are always right by our measure. For the same reason, in rows 3, 4,
+5 and 8 every question that goes to the three experts counts as right; the mistakes in those rows are
+Jev's (or the LLM's) own.
+
+**One thing to know before trusting this.** We checked "Jev first, one expert on the rest" twice. In the first, stricter check
 Jev's answers were right 93 times out of 100 where 94 were needed. In the second check, with more data
 for tuning, they passed (96 out of 100). The table above is the second check. Both checks are described
 in section 8 with nothing left out; every table and the exact method are in [DETAILS.md](DETAILS.md).
@@ -44,8 +63,10 @@ Where the numbers in the table come from:
 - Model's bill: what TypeSafe and OpenAI charged for our own run on these questions.
 - Model's time: measured by us once, from one laptop. The ordinary LLM was asked every question three
   times (its sureness jumps between tries); asked once it costs $0.07 and takes 25 minutes.
-- Right answers and the number of questions left to the expert: section 7 (rows 4, 5) and section 8,
-  check 2 (rows 2, 3).
+- Right answers and the number of questions left to the experts: section 7 (rows 9, 10), section 8,
+  check 2 (rows 2, 7), and `runs/crossval_strict.txt` (rows 3, 4, 5, 8). "Stricter" and "strictest" mean
+  that the answers taken from Jev had to be right 97 and 98 times out of 100 on the tuning questions,
+  where rows 2 and 3 ask for 96.
 
 ## 1. The problem
 
