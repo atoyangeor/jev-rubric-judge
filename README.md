@@ -1,13 +1,51 @@
 # jev-rubric-judge
 
-**In one sentence:** when the model Jev answers yes/no quality questions first and a person answers only
-the ones Jev is unsure about, the result is as accurate as the person working alone (94 right answers
-out of 100), the person does a quarter of the work, and Jev costs 11 times less and answers 60 times
-faster than an ordinary LLM doing the same job.
+## The result, on our data
 
-One thing to know before trusting that sentence: we checked it twice. The first check missed the
-accuracy bar by one point (93 out of 100 instead of 94). The second check, on more data, met it. Both
-are described below, with nothing left out. Every table and the exact method are in [DETAILS.md](DETAILS.md).
+**Data:** 1,115 real yes/no quality questions about LLM-written texts from the public dataset InFoBench.
+Three experts had already answered every question, so the right answer to each is known.
+
+**What we did:** the model Jev answered first. A person answered only the questions Jev was unsure about.
+
+**What we got:**
+
+- **Money:** the expert's work cost **$117 and not $464**. That is 75% less.
+- **Time:** the expert spent **2.0 hours and not 7.9**.
+- **Quality:** **the same.** 94.0% right answers with Jev first, 94.1% when the expert answers everything.
+- **Jev itself** cost **1.6 cents** and took **72 seconds** for all 1,115 questions.
+
+| # | Who answers the 1,115 questions | Questions the expert answers | Expert's pay | Expert's time | Model's bill | Model's time | Right answers |
+|---|---|---|---|---|---|---|---|
+| 1 | The expert alone | 1,115 | $464 | 7.9 hours | no model | no model | 94.1% |
+| 2 | **Jev first, the expert on the rest** | **282** | **$117** | **2.0 hours** | **$0.016** | **72 seconds** | **94.0%** |
+| 3 | An ordinary LLM first, the expert on the rest | 308 | $128 | 2.2 hours | $0.20 | 74 minutes | 94.2% |
+| 4 | Jev alone, no expert | 0 | $0 | 0 | $0.016 | 72 seconds | 89.9% |
+| 5 | An ordinary LLM alone, no expert | 0 | $0 | 0 | $0.20 | 74 minutes | 84.7% |
+
+**In words:**
+
+1. Put Jev in front of the expert and you keep the expert's quality while paying for a quarter of his
+   work (row 2 against row 1).
+2. An ordinary LLM (`gpt-6-luna`) can do the same job, but it is about 12 times more expensive and 60
+   times slower than Jev, and it leaves the expert slightly more work (row 3 against row 2).
+3. With no expert at all, Jev is right on 5 more questions out of every 100 than the ordinary LLM
+   (row 4 against row 5). Neither is as good as the expert, which is why the expert stays for the hard
+   questions.
+
+**One thing to know before trusting this.** We checked rows 2 and 3 twice. In the first, stricter check
+Jev's answers were right 93 times out of 100 where 94 were needed. In the second check, with more data
+for tuning, they passed (96 out of 100). The table above is the second check. Both checks are described
+in section 8 with nothing left out; every table and the exact method are in [DETAILS.md](DETAILS.md).
+
+Where the numbers in the table come from:
+
+- Expert's pay and time: one expert answer costs $0.42 and takes 25 seconds (section 1); multiply by
+  the number of questions the expert answers.
+- Model's bill: what TypeSafe and OpenAI charged for our own run on these questions.
+- Model's time: measured by us once, from one laptop. The ordinary LLM was asked every question three
+  times (its sureness jumps between tries); asked once it costs $0.07 and takes 25 minutes.
+- Right answers and the number of questions left to the expert: section 7 (rows 4, 5) and section 8,
+  check 2 (rows 2, 3).
 
 ## 1. The problem
 
@@ -93,25 +131,24 @@ of InFoBench did it with GPT-4. We need to know whether Jev gives anything beyon
 
 ## 7. Result 1: Jev alone against an ordinary LLM alone
 
-Here there is no person at all. The model answers every question. Numbers are for 1,000 questions.
+Here there is no person at all. The model answers all 1,115 questions.
 
-| # | Who answers | Right answers out of 100 | Cost of 1,000 answers | Time for 1,000 answers |
+| # | Who answers | Right answers | Cost of all 1,115 answers | Time for all 1,115 answers |
 |---|---|---|---|---|
-| 1 | Jev | 90 | $0.015 | 65 seconds |
-| 2 | Ordinary LLM | 85 | $0.17 | 66 minutes |
-| 3 | One expert | 94 | $416 | 7 hours |
+| 1 | Jev | 1,002 of 1,115 (90 out of 100) | $0.016 | 72 seconds |
+| 2 | Ordinary LLM | 944 of 1,115 (85 out of 100) | $0.20 | 74 minutes |
+| 3 | One expert | 94 out of 100 | $464 | 7.9 hours |
 
-**Guess 1 is confirmed.** Jev is right more often than the ordinary LLM, costs 11 times less and is 60
-times faster. Neither reaches the expert when working alone.
+**Guess 1 is confirmed.** Jev is right more often than the ordinary LLM, costs about 12 times less and
+is 60 times faster. Neither reaches the expert when working alone.
 
 Where the numbers come from:
 
-- Right answers: all 1,115 questions we could use. Jev was right on 1,002, the ordinary LLM on 944.
-  (1,115 and not 1,123, because 8 questions were given to Jev as examples of how to answer.)
-- Cost: the bill for our own run, scaled to 1,000 questions. The expert: 1,000 × $0.42.
+- 1,115 questions and not 1,123, because 8 questions were given to Jev as examples of how to answer.
+- Cost: the bill for our own run on these questions. The expert: 1,115 × $0.42.
 - Time: we measured it ourselves, once, from one laptop. On another day it may differ.
 - We asked the ordinary LLM every question three times, because its sureness jumps from one try to the
-  next. Asked once, it costs $0.06 and takes 22 minutes; then Jev is 4 times cheaper and 20 times faster.
+  next. Asked once, it costs $0.07 and takes 25 minutes; then Jev is 4 times cheaper and 20 times faster.
 
 ## 8. Result 2: Jev first, the person on the rest
 
@@ -156,8 +193,8 @@ with a different split and average.
 **With Jev first, the person does a quarter of the work, and the result is as accurate as the person
 alone: 94 out of 100.**
 
-In money and time, for 1,000 questions: the expert answers 253 questions and not 1,000. That is $105
-and not $416, and 1.8 hours and not 7. Jev itself adds $0.015 and about a minute.
+In money and time, on our 1,115 questions: the expert answers 282 questions and not 1,115. That is $117
+and not $464, and 2.0 hours and not 7.9. Jev itself adds 1.6 cents and 72 seconds.
 
 Exact figures behind the table: Jev's taken answers were right 95.6% of the time, the ordinary LLM's
 95.8%; together with the person 94.0% and 94.2%; the person alone 94.1%.
