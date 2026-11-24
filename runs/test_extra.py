@@ -30,3 +30,10 @@ csv.field_size_limit(10**9)
 for r in csv.DictReader(open("data/raw/expert_hard.csv", encoding="utf-8")):
     if r["id"] in ("domain_oriented_task_153", "domain_oriented_task_139"):
         print(r["id"], "alpaca-7b cells:", [repr(r[c][:40]) for c in ("alpaca-7b-annotation-annotator1", "alpaca-7b-annotation-annotator2", "alpaca-7b-annotation")], "| questions:", len([l for l in r["decomposed_questions"].splitlines() if l.strip()]), "| response empty:", not r["alpaca-7b"].strip())
+
+# Whole process: the model's taken answers plus ONE expert on the rest, for each of the three experts.
+print("whole process on the 644 test questions (model's taken answers + one expert on the rest):")
+for name, taken, model_answer in (("Jev", tj, np.where(pj >= 0.83, 1, 0)), ("LLM judge", tl, np.ones(len(y), int))):
+    per = [float((np.where(taken, model_answer, labels[:, e]) == y).mean()) for e in range(3)]
+    print(f"  {name}: with expert 1, 2, 3 on the rest {[round(100 * x, 1) for x in per]}, mean {100 * np.mean(per):.1f}%")
+print("  one expert alone:", [round(100 * float((labels[:, e] == y).mean()), 1) for e in range(3)], "mean", round(100 * float(np.mean([(labels[:, e] == y).mean() for e in range(3)])), 1))

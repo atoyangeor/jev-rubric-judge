@@ -1,0 +1,3 @@
+Jev noul-fewshot: took 'yes' 450, right 433 (96.2%); took 'no' 66, right 47 (71.2%); wrong taken answers 36: 22 on questions where experts disagreed, 4 on Number questions; of 120 questions where experts disagreed, 39 went to a human
+LLM instruction: took 'yes' 482, right 461 (95.6%); took no 'no' answers; wrong taken answers 21: 14 on questions where experts disagreed, 2 on Number questions; of 120 questions where experts disagreed, 52 went to a human
+needed for 94.1% on Jev's 516 taken answers: 486 right; got 480

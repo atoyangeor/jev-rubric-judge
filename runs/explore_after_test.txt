@@ -1,0 +1,36 @@
+A. Jev noul-fewshot on the test set under other boundaries (frozen pair first)
+  t_yes 0.83 t_no 0.42: human 128 of 644 = 19.9 per 100; taken right 480/516 = 93.0%
+  t_yes 0.83 t_no 0.30: human 148 of 644 = 23.0 per 100; taken right 469/496 = 94.6%
+  t_yes 0.83 t_no 0.20: human 157 of 644 = 24.4 per 100; taken right 462/487 = 94.9%
+  t_yes 0.83 t_no 0.10: human 169 of 644 = 26.2 per 100; taken right 456/475 = 96.0%
+  t_yes 0.83 t_no none: human 194 of 644 = 30.1 per 100; taken right 433/450 = 96.2%
+  t_yes 0.90 t_no 0.42: human 198 of 644 = 30.7 per 100; taken right 415/446 = 93.0%
+  t_yes 0.90 t_no 0.10: human 239 of 644 = 37.1 per 100; taken right 391/405 = 96.5%
+  t_yes 0.90 t_no none: human 264 of 644 = 41.0 per 100; taken right 368/380 = 96.8%
+  t_yes 0.95 t_no none: human 337 of 644 = 52.3 per 100; taken right 299/307 = 97.4%
+  best possible on the test set itself for Jev (boundaries chosen on the test set, optimistic): t_yes 0.64 t_no 0.12, human 82 = 12.7 per 100, taken right 529/562 = 94.1%
+  best possible on the test set itself for LLM (boundaries chosen on the test set, optimistic): t_yes 0.52 t_no -0.01, human 150 = 23.3 per 100, taken right 469/494 = 94.9%
+
+B. Cross-validation over all 50 instructions, 1115 questions: boundaries chosen on 9 tenths of the instructions, applied to the remaining tenth; 20 random ways to cut into tenths
+  Jev noul-fewshot, rule 94.1%: human 13.1 per 100 (from 12.5 to 13.6 across the 20 cuts); taken answers right 93.7% (from 93.2 to 93.9); 94.1% met in 0 of 20 cuts
+  Jev noul-fewshot, rule 96.0%: human 25.4 per 100 (from 24.2 to 26.5 across the 20 cuts); taken answers right 95.6% (from 94.9 to 96.0); 94.1% met in 20 of 20 cuts
+  LLM judge instruction, rule 94.1%: human 25.8 per 100 (from 25.8 to 26.0 across the 20 cuts); taken answers right 95.5% (from 95.5 to 95.5); 94.1% met in 20 of 20 cuts
+  LLM judge instruction, rule 96.0%: human 27.5 per 100 (from 27.1 to 27.9 across the 20 cuts); taken answers right 95.8% (from 95.6 to 96.1); 94.1% met in 20 of 20 cuts
+
+C. Alone, no human
+  test 644: Jev 576/644 = 89.4%, LLM 542/644 = 84.2%, difference 5.3 points, 95% interval [1.2 9.3]; calibration error Jev 0.039, LLM 0.137
+  all 1115: Jev 1002/1115 = 89.9%, LLM 944/1115 = 84.7%, difference 5.2 points, 95% interval [2.1 8.3]; calibration error Jev 0.025, LLM 0.134
+
+D. Seconds (one laptop, 4 parallel requests to Jev, 8 to OpenAI)
+  Jev: 149 requests for 644 questions, sum of request seconds 41.9 -> 0.065 s per question; median request 0.21 s
+  LLM: 1932 calls, median 0.92 s per call, mean 1.32 s; one call per question -> 1.32 s per question, three repeats -> 3.97 s
+  expert (paper): 1,440 minutes for 3 experts x 1,135 questions -> 25.4 s per answer
+
+E. seven real dev questions for the worked example
+   0.99 correct: yes | Does the generated text include a list of chapters?
+   0.99 correct: yes | Does the generated workout routine include at least five different exe
+   0.88 correct: yes | Is the generated text a list?
+   0.8 correct: no | In the generated poem, do the stanzas 7-8 express emotions?
+   0.56 correct: yes | Is the tone of the generated text more professional than the email in 
+   0.22 correct: no | Does the generated text contain the longest-length sentence at the exa
+   0.05 correct: no | Are the remaining credit balances for each day accurate in the generat

@@ -1,0 +1,21 @@
+Jev noul-fewshot | alone 426 of 471 = 90.4% | calibration error 0.026
+Jev noul-fewshot | condition on dev 94.1% | t_yes 0.71 t_no 0.42 | human 42 of 471 = 8.9 per 100 | taken right 404/429 = 94.2% | on unseen halves: 93.6% right on average, 94.1% met in 90 of 200, human 10.0 per 100
+Jev noul-fewshot | condition on dev 96.0% | t_yes 0.83 t_no 0.42 | human 86 of 471 = 18.3 per 100 | taken right 370/385 = 96.1% | on unseen halves: 95.2% right on average, 94.1% met in 135 of 200, human 19.5 per 100
+Jev noul-instruction | alone 427 of 471 = 90.7% | calibration error 0.028
+Jev noul-instruction | condition on dev 94.1% | t_yes 0.81 t_no 0.46 | human 55 of 471 = 11.7 per 100 | taken right 392/416 = 94.2% | on unseen halves: 93.2% right on average, 94.1% met in 75 of 200, human 10.3 per 100
+Jev noul-instruction | condition on dev 96.0% | t_yes 0.81 t_no 0.21 | human 88 of 471 = 18.7 per 100 | taken right 368/383 = 96.1% | on unseen halves: 95.2% right on average, 94.1% met in 142 of 200, human 18.1 per 100
+Jev noul-plain | alone 416 of 471 = 88.3% | calibration error 0.039
+Jev noul-plain | condition on dev 94.1% | t_yes 0.79 t_no 0.28 | human 74 of 471 = 15.7 per 100 | taken right 374/397 = 94.2% | on unseen halves: 93.5% right on average, 94.1% met in 87 of 200, human 15.0 per 100
+Jev noul-plain | condition on dev 96.0% | t_yes 0.91 t_no 0.34 | human 133 of 471 = 28.2 per 100 | taken right 325/338 = 96.2% | on unseen halves: 94.8% right on average, 94.1% met in 124 of 200, human 24.3 per 100
+Jev noul-criteria | alone 411 of 471 = 87.3% | calibration error 0.048
+Jev noul-criteria | condition on dev 94.1% | t_yes 0.66 t_no 0.13 | human 93 of 471 = 19.7 per 100 | taken right 356/378 = 94.2% | on unseen halves: 92.9% right on average, 94.1% met in 67 of 200, human 19.4 per 100
+Jev noul-criteria | condition on dev 96.0% | t_yes 0.86 t_no 0.24 | human 157 of 471 = 33.3 per 100 | taken right 302/314 = 96.2% | on unseen halves: 94.5% right on average, 94.1% met in 110 of 200, human 30.4 per 100
+LLM judge paper | alone 414 of 471 = 87.9% | calibration error 0.111
+LLM judge paper | condition on dev 94.1% | t_yes 0.53 t_no -0.01 | human 114 of 471 = 24.2 per 100 | taken right 338/357 = 94.7% | on unseen halves: 93.8% right on average, 94.1% met in 117 of 200, human 23.1 per 100
+LLM judge paper | condition on dev 96.0% | t_yes 0.91 t_no -0.01 | human 141 of 471 = 29.9 per 100 | taken right 317/330 = 96.1% | on unseen halves: 95.6% right on average, 94.1% met in 149 of 194, human 29.8 per 100
+LLM judge instruction | alone 402 of 471 = 85.4% | calibration error 0.129
+LLM judge instruction | condition on dev 94.1% | t_yes 0.69 t_no -0.01 | human 138 of 471 = 29.3 per 100 | taken right 321/333 = 96.4% | on unseen halves: 95.8% right on average, 94.1% met in 184 of 200, human 28.0 per 100
+LLM judge instruction | condition on dev 96.0% | t_yes 0.69 t_no -0.01 | human 138 of 471 = 29.3 per 100 | taken right 321/333 = 96.4% | on unseen halves: 96.4% right on average, 94.1% met in 184 of 186, human 29.9 per 100
+LLM judge fewshot | alone 411 of 471 = 87.3% | calibration error 0.120
+LLM judge fewshot | condition on dev 94.1% | t_yes 0.51 t_no -0.01 | human 122 of 471 = 25.9 per 100 | taken right 333/349 = 95.4% | on unseen halves: 95.0% right on average, 94.1% met in 161 of 195, human 25.5 per 100
+LLM judge fewshot | condition on dev 96.0% | t_yes 0.85 t_no -0.01 | human 143 of 471 = 30.4 per 100 | taken right 315/328 = 96.0% | on unseen halves: 94.8% right on average, 94.1% met in 95 of 123, human 27.7 per 100
