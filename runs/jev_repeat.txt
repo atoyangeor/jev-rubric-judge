@@ -1,0 +1,5 @@
+dev: 471 questions in 99 requests, wall-clock 3.3 s with 8 parallel requests
+test: 644 questions in 149 requests, wall-clock 4.3 s with 8 parallel requests
+Jev repeat: 248 calls, 385613 input tokens (1555 per call), 19947 output tokens, 0 reasoning tokens, $0.0162
+total wall-clock 7.6 s for 1115 questions
+same request twice: identical probability on 624 of 1115 questions; differs by 0.05 or more on 25, by 0.10 or more on 2; largest difference 0.11

@@ -13,15 +13,15 @@ Three experts had already answered every question.
 - **Time:** the expert spent **2.0 hours and not 7.9**.
 - **Quality: not lower, slightly higher.** 94.9% right answers with Jev first, 93.3% when the expert
   answers everything.
-- **Jev itself** cost **1.6 cents** and took **72 seconds** for all 1,115 questions.
+- **Jev itself** cost **1.6 cents** and took **8 seconds** for all 1,115 questions.
 
 | # | Who answers the 1,115 questions | Questions the expert answers | Expert's pay | Expert's time | Model's bill | Model's time | Right answers |
 |---|---|---|---|---|---|---|---|
 | 1 | The expert alone | 1,115 | $464 | 7.9 hours | no model | no model | 93.3% |
-| 2 | **Jev first, the expert on the rest** | **282** | **$117** | **2.0 hours** | **$0.016** | **72 seconds** | **94.9%** |
-| 3 | An ordinary LLM first, the expert on the rest | 308 | $128 | 2.2 hours | $0.20 | 74 minutes | 95.1% |
-| 4 | Jev alone, no expert | 0 | $0 | 0 | $0.016 | 72 seconds | 92.8% |
-| 5 | An ordinary LLM alone, no expert | 0 | $0 | 0 | $0.20 | 74 minutes | 91.1% |
+| 2 | **Jev first, the expert on the rest** | **282** | **$117** | **2.0 hours** | **$0.016** | **8 seconds** | **94.9%** |
+| 3 | An ordinary LLM first, the expert on the rest | 300 | $125 | 2.1 hours | $0.064 | 115 seconds | 95.1% |
+| 4 | Jev alone, no expert | 0 | $0 | 0 | $0.016 | 8 seconds | 92.8% |
+| 5 | An ordinary LLM alone, no expert | 0 | $0 | 0 | $0.064 | 115 seconds | 91.1% |
 
 **In words:**
 
@@ -29,8 +29,8 @@ Three experts had already answered every question.
    (row 2 against row 1). It even goes up a little, by 1.6 points.
 2. **Why it can go up.** On the questions Jev is sure about, Jev is right more often than a single
    person: 97.4% against 95.3%.
-3. **An ordinary LLM** (`gpt-6-luna`) does the same job equally well (row 3), but costs 4 to 12 times
-   more than Jev and is 20 to 60 times slower.
+3. **An ordinary LLM** (`gpt-6-luna`) does the same job equally well (row 3). It costs 4 times more
+   than Jev and is 15 times slower.
 4. **With no expert at all**, Jev is almost at the level of one person: 92.8% against 93.3%. The
    ordinary LLM is lower: 91.1% at best.
 
@@ -52,11 +52,12 @@ Where the numbers in the table come from:
 - Expert's pay and time: one expert answer costs $0.42 and takes 25 seconds (section 1); multiply by
   the number of questions the expert answers.
 - Model's bill: what our own run on these questions cost at the price lists of TypeSafe and OpenAI.
-- Model's time: the sum of the waiting times of all requests, measured once, from one laptop. The
-  ordinary LLM was asked every question three times; we later saw that once gives the same result,
-  which would be $0.07 and 25 minutes.
-- Right answers: `runs/fair_yardstick.txt`. Row 5 uses the best cut-off for the LLM; with the same
-  simple rule as Jev ("above 0.5 means yes") it is 87.3%.
+- Model's time: from the first request to the last answer, with 8 requests running at once for both
+  models, measured once, from one laptop (`runs/jev_repeat.txt`, `runs/llm_rerun_v2.py`).
+- The ordinary LLM is asked each question once. In our first run we asked it three times and averaged;
+  a review showed that once gives the same result, so we ran it again once per question.
+- Right answers: `runs/llm_v2_analysis.txt`. Row 5 uses the best cut-off for the LLM; with the same
+  simple rule as Jev ("above 0.5 means yes") it is 87.9%.
 
 Every table and the exact method are in [DETAILS.md](DETAILS.md).
 
@@ -164,23 +165,25 @@ Here there is no person at all. The model answers all 1,115 questions.
 
 | # | Who answers | Right answers | Cost of all 1,115 answers | Time for all 1,115 answers |
 |---|---|---|---|---|
-| 1 | Jev | 92.8% | $0.016 | 72 seconds |
-| 2 | Ordinary LLM | 91.1% at best | $0.20 | 74 minutes |
+| 1 | Jev | 92.8% | $0.016 | 8 seconds |
+| 2 | Ordinary LLM | 91.1% at best | $0.064 | 115 seconds |
 | 3 | One person | 93.3% | $464 | 7.9 hours |
 
-**Guess 1 is confirmed.** Jev is right at least as often as the ordinary LLM, costs 4 to 12 times less
-and is 20 to 60 times faster.
+**Guess 1 is confirmed.** Jev is right at least as often as the ordinary LLM, costs 4 times less and is
+15 times faster.
 
 Details behind the table:
 
 - "At best" for the LLM: a model's number has to be turned into "yes" or "no" by a cut-off. With the
-  simple rule "above 0.5 means yes" Jev gets 92.8% and the LLM 87.3%. This LLM's numbers lean towards
+  simple rule "above 0.5 means yes" Jev gets 92.8% and the LLM 87.9%. This LLM's numbers lean towards
   "no", so the simple rule is unfair to it. With the best cut-off for each model, found on other
-  questions, the LLM gets 91.1% and Jev 92.2%.
+  questions, the LLM gets 91.1% and Jev 92.2%. In practice this means Jev works with the simple rule
+  out of the box, and the LLM needs its cut-off tuned first.
 - Jev against the person: 0.5 points apart. That is too small for our data to tell them apart. The LLM
   at its best is 2.2 points below the person, and that gap is confirmed.
-- 4 and 20 times are for asking the LLM once per question; 12 and 60 for three times, as we ran it.
-- Time was measured once, from one laptop. On another day it may differ.
+- Time was measured once, from one laptop, with 8 requests at once for both. On another day it may differ.
+- Jev gives almost the same number when asked twice: we sent every request a second time, and the
+  answer differed by 0.10 or more on 2 questions out of 1,115.
 
 ## 8. Result 2: Jev first, the person on the rest
 
@@ -216,14 +219,18 @@ question has been checked by a rule that was tuned without it.
 | # | Who answers first | Questions out of 100 left to the person | Right answers on the questions taken from the model: the model | The person on those same questions | Model and person together | The person alone |
 |---|---|---|---|---|---|---|
 | 1 | Jev | 25 | 97.4% | 95.3% | 94.9% | 93.3% |
-| 2 | Ordinary LLM | 28 | 97.6% | 95.3% | 95.1% | 93.3% |
+| 2 | Ordinary LLM | 27 | 97.6% | 95.3% | 95.1% | 93.3% |
 
 **With Jev first, the person does a quarter of the work, and the result is right more often than the
 person alone: 94.9% against 93.3%.** Here the gap, 1.6 points, is large enough to be confirmed: when we
 reshuffled the tasks 2,000 times it stayed between 0.2 and 3.0 points in 95% of the reshuffles.
 
 In money and time, on our 1,115 questions: the expert answers 282 questions and not 1,115. That is $117
-and not $464, and 2.0 hours and not 7.9. Jev itself adds 1.6 cents and 72 seconds.
+and not $464, and 2.0 hours and not 7.9. Jev itself adds 1.6 cents and 8 seconds.
+
+Jev and the ordinary LLM come out equal here. We compared them directly: the difference in questions
+left to the person is 1.4 out of 100 and the difference in right answers is 0.1 points, both well
+within what chance alone produces on this data. What separates them is price and speed (section 7).
 
 ### What the two checks say about our guesses
 
@@ -288,7 +295,7 @@ has checked.
 - **Results vary from run to run.** Tuned on a different set of tasks, Jev's answers come out a little
   better or a little worse; check 1 and check 2 show the spread.
 - **One ordinary LLM, a cheap one.** A stronger one might answer better.
-- **Speed was measured once, from one laptop**, as the sum of the waiting times of all requests.
+- **Speed was measured once, from one laptop**, with 8 requests running at once.
 - **The texts are old.** They were written by 2023 models, in English only.
 
 ## 12. Run it yourself
@@ -298,6 +305,7 @@ uv sync
 cp .env.example .env            # put TYPESAFE_API_KEY and OPENAI_API_KEY there; never commit .env
 uv run pytest
 uv run python runs/fair_yardstick.py        # the fair grading: alone, check 1, check 2
+uv run python runs/llm_v2_analysis.py       # Jev against the LLM asked once per question
 uv run python runs/crossval.py              # check 2 with the first grading
 uv run python runs/crossval_strict.py       # section 10
 uv run python -m jev_rubric_judge.cli report --part test --variants noul-fewshot \

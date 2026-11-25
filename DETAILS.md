@@ -227,6 +227,42 @@ frozen before the test run. Its findings, each rechecked here:
 8. **Baseline for "three experts on everything" was inflated.** Two experts everywhere plus a third on
    their disagreements gives the same vote for 2,345 answers, $975, not $1,391.
 
+## Rerun of the LLM judge and of Jev, 2026-11-25
+
+Done to close three review findings (`runs/llm_rerun_v2.py`, `runs/jev_repeat.py`,
+`runs/llm_v2_analysis.py`; outputs in the `.txt` files next to them).
+
+- **The LLM judge was asked once per question**, same model and prompt, raw logprobs saved. 1,123 calls,
+  $0.064, 115 s from first request to last answer with 8 parallel calls (sum of request times 923 s).
+- **The API gives at most 5 alternatives and usually one.** A request for 20 is refused ("Invalid value
+  for 'top_logprobs': must be less than or equal to 5"). Of 1,123 calls, 952 returned a single
+  alternative. The first formula, yes / (yes + no), turns those into exactly 1.0 or 0.0. A second
+  formula, fixed before looking at results, uses the returned token's own probability when only one
+  comes back: exp(logprob) for "yes", 1 − exp(logprob) for "no".
+- **Jev was run a second time** with 8 parallel requests: 7.6 s for the 1,115 questions (248 requests),
+  $0.016. The same request sent twice gave the identical probability on 624 of 1,115 questions; it
+  differed by 0.05 or more on 25 and by 0.10 or more on 2 (largest difference 0.11).
+
+Fair yardstick, cross-validation over all 50 instructions, means over 20 cuts; intervals on the first cut:
+
+| What | Jev | LLM, one call, first formula | LLM, one call, second formula |
+|---|---|---|---|
+| Distinct probability values; calibration error | 97; 0.025 | 173; 0.132 | 489; 0.131 |
+| Alone, 0.5 rule | 92.8% | 87.9% | 87.9% |
+| Alone, cut-off tuned on other instructions | 92.2% | 91.1% | 90.6% |
+| Rule 96%: left per 100; taken answers model / the person; whole process | 25.3; 97.4% / 95.3%; 94.9% | 26.9; 97.6% / 95.3%; 95.1% | 26.9; 97.6% / 95.3%; 95.1% |
+| Rule 97% | 38.7; 98.0% / 96.2%; 94.5% | 57.4; 97.4% / 95.4%; 94.2% | 39.9; 98.1% / 95.9%; 94.7% |
+| Rule 98% | 57.4; 98.3% / 97.1%; 93.9% | takes nothing | 70.3; 99.8% / 98.4%; 93.7% |
+
+One person alone: 93.3%. Jev minus the LLM (second formula) under the 96% rule: questions left per 100
+−1.4 (interval −6.3 to 3.5); whole process +0.1 points (−0.7 to 0.8). Neither difference is established.
+
+What this changes: with the second formula the LLM judge can be made stricter, so the earlier statement
+that it cannot was an effect of the first formula. In the "first reader" role Jev and the LLM judge are
+equal in quality on this data. Jev's measured advantages are cost (0.064 / 0.0162 ≈ 4 times), time under
+equal parallelism (115 / 7.6 ≈ 15 times), calibration error (0.025 against 0.131) and that the plain 0.5
+rule works for it (92.8% against 87.9%).
+
 ## Data
 
 Files in `data/raw/`, copied from the authors' public folder
